@@ -1,11 +1,7 @@
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+console.log("Hello, world!");
 
-function createPlayer(name, sign) {
+function createPlayer(sign) {
     return {
-        name,
         sign
     }
 }
@@ -55,45 +51,23 @@ function checkDraw() {
     return true;
 }
 
-function runGame(player1, player2) {
-    let isDone = false;
 
-    function nextTurn(player) {
-        readline.question('Enter your row coordinate: ', x => {
-            let row = parseInt(x);
-            readline.question('Enter your column coordinate: ', y => {
-                let col = parseInt(y);
-                if (placeSign(player, row, col)) {
-                    console.log(gameBoard);
-                    if (checkWin(player)) {
-                        console.log(`${player.name} Wins!`);
-                        isDone = true;
-                        readline.close();
-                    } else if (checkDraw()) {
-                        console.log("It's a draw!");
-                        isDone = true;
-                        readline.close();
-                    } else {
-                        nextTurn(player === player1 ? player2 : player1);
-                    }
-                } else {
-                    console.log("Invalid move, try again.");
-                    nextTurn(player);
-                }
-            });
-        });
-    }
-
-    nextTurn(player1);
-}
-
-const player1 = createPlayer("rodney", "X");
-const player2 = createPlayer("low", "O");
+const player1 = createPlayer("X");
+const player2 = createPlayer("O");
 
 let gameBoard = [
     [null, null, null],
     [null, null, null],
     [null, null, null]
 ];
+
+let player = player1;
+const cells = document.querySelectorAll('.cell');
+cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+        cell.textContent = player.sign;
+        player = player === player1 ? player2 : player1;
+    });
+});
 
 runGame(player1, player2);
