@@ -3,11 +3,10 @@ const readline = require('readline').createInterface({
     output: process.stdout
 });
 
-function createPlayer(name, sign, state) {
+function createPlayer(name, sign) {
     return {
         name,
-        sign,
-        state
+        sign
     }
 }
 
@@ -20,23 +19,76 @@ function placeSign(player, row, col) {
     }
 }
 
-function runGame(player1, player2) {
-    let row = 0;
-    let col = 0;
+function checkWin(player) {
+    // Check rows
+    for (let i = 0; i < 3; i++) {
+        if (gameBoard[i][0] === player.sign && gameBoard[i][1] === player.sign && gameBoard[i][2] === player.sign) {
+            return true;
+        }
+    }
 
-    readline.question('Enter your row coordinate: ', x => {
-        row = parseInt(x);
-        readline.question('Enter your column coordinate: ', y => {
-            col = parseInt(y);
-            placeSign(player1, row, col);
-            console.log(gameBoard);
-            readline.close();
-        });
-    });
+    // Check columns
+    for (let i = 0; i < 3; i++) {
+        if (gameBoard[0][i] === player.sign && gameBoard[1][i] === player.sign && gameBoard[2][i] === player.sign) {
+            return true;
+        }
+    }
+
+    // Check diagonals
+    if (gameBoard[0][0] === player.sign && gameBoard[1][1] === player.sign && gameBoard[2][2] === player.sign) {
+        return true;
+    }
+    if (gameBoard[0][2] === player.sign && gameBoard[1][1] === player.sign && gameBoard[2][0] === player.sign) {
+        return true;
+    }
+
+    // No win
+    return false;
 }
 
-const player1 = createPlayer("rodney", "X", []);
-const player2 = createPlayer("low", "O", []);
+function checkDraw() {
+    for (let row of gameBoard) {
+        if (row.includes(null)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function runGame(player1, player2) {
+    let isDone = false;
+
+    function nextTurn(player) {
+        readline.question('Enter your row coordinate: ', x => {
+            let row = parseInt(x);
+            readline.question('Enter your column coordinate: ', y => {
+                let col = parseInt(y);
+                if (placeSign(player, row, col)) {
+                    console.log(gameBoard);
+                    if (checkWin(player)) {
+                        console.log(`${player.name} Wins!`);
+                        isDone = true;
+                        readline.close();
+                    } else if (checkDraw()) {
+                        console.log("It's a draw!");
+                        isDone = true;
+                        readline.close();
+                    } else {
+                        nextTurn(player === player1 ? player2 : player1);
+                    }
+                } else {
+                    console.log("Invalid move, try again.");
+                    nextTurn(player);
+                }
+            });
+        });
+    }
+
+    nextTurn(player1);
+}
+
+const player1 = createPlayer("rodney", "X");
+const player2 = createPlayer("low", "O");
 
 let gameBoard = [
     [null, null, null],
