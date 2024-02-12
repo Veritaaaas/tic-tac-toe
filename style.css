@@ -17,6 +17,10 @@ html, body {
     padding-right: 8rem;
 }
 
+#reset {
+    cursor: pointer;
+}
+
 .board {
     width: fit-content;
     display: grid;

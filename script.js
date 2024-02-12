@@ -1,8 +1,9 @@
 console.log("Hello, world!");
 
-function createPlayer(sign) {
+function createPlayer(sign, score) {
     return {
-        sign
+        sign,
+        score
     }
 }
 
@@ -52,8 +53,15 @@ function checkDraw() {
 }
 
 
-const player1 = createPlayer("X");
-const player2 = createPlayer("O");
+const reset = document.querySelector('#reset');
+
+const player1 = createPlayer("X", 0);
+const player2 = createPlayer("O", 0);
+const cells = document.querySelectorAll('.cell');
+const player1_score = document.querySelector('#player1').getElementsByTagName("h3")[1];
+const player2_score = document.querySelector('#player2').getElementsByTagName("h3")[1];
+const tie_score = document.querySelector('#tie').getElementsByTagName("h3")[1];
+
 
 let gameBoard = [
     [null, null, null],
@@ -62,12 +70,48 @@ let gameBoard = [
 ];
 
 let player = player1;
-const cells = document.querySelectorAll('.cell');
-cells.forEach(cell => {
+
+cells.forEach((cell, index) => {
     cell.addEventListener('click', () => {
-        cell.textContent = player.sign;
-        player = player === player1 ? player2 : player1;
+        let row = Math.floor(index / 3);
+        let col = index % 3;
+
+        if (cell.textContent === "" && placeSign(player, row, col)) {
+            cell.textContent = player.sign;
+
+            if(checkWin(player)) {
+                alert(player.sign + " wins!");
+                if (player.sign === "X") {
+                    player1_score.textContent = player.score + 1;
+                } else {
+                    player2_score.textContent = player.score + 1;
+                }
+            } else if (checkDraw()) {
+                alert("It's a draw!");
+                tie_score.textContent = parseInt(tie_score.textContent) + 1;
+            }
+
+            player = player === player1 ? player2 : player1;
+        }
     });
 });
 
-runGame(player1, player2);
+reset.addEventListener('click', () => {
+    gameBoard = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+    ];
+
+    cells.forEach((cell) => {
+        cell.textContent = "";
+    });
+
+    player1.score = 0;
+    player2.score = 0;
+
+    player1_score.textContent = 0;
+    player2_score.textContent = 0;
+    tie_score.textContent = 0;
+});
+
