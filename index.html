@@ -8,25 +8,40 @@
 </head>
 <body>
     <div class="header">
-        <i class="fa-solid fa-user"></i>
-        <div class="turn">
-            <h3>X's Turn</h3>
+        <div class="player-count">
+            <i class="fa-solid fa-user" id="computer"></i>
+            <h3 id="player-status">1 Player</h3>
         </div>
-        <i class="fa-solid fa-rotate-left" id="reset"></i>
+        <div class="turn">
+            <h3>X Turn</h3>
+        </div>
+        <div class="reset-class">
+            <i class="fa-solid fa-rotate-left" id="reset"></i>
+        </div>
     </div>
 
-    <div class="board">
-        <div class="cell" id="0"></div>
-        <div class="cell" id="1"></div>
-        <div class="cell" id="2"></div>
-        <div class="cell" id="3"></div>
-        <div class="cell" id="4"></div>
-        <div class="cell" id="5"></div>
-        <div class="cell" id="6"></div>
-        <div class="cell" id="7"></div>
-        <div class="cell" id="8"></div>
+    <div class="game-board">
+        <div class="board">
+            <div class="cell" id="0"></div>
+            <div class="cell" id="1"></div>
+            <div class="cell" id="2"></div>
+            <div class="cell" id="3"></div>
+            <div class="cell" id="4"></div>
+            <div class="cell" id="5"></div>
+            <div class="cell" id="6"></div>
+            <div class="cell" id="7"></div>
+            <div class="cell" id="8"></div>
+        </div>
     </div>
 
+    <div class="modal">
+        <div class="modal-content">
+            <h1 id="winner">Player 1 Wins</h1>
+            <button id="play-again">Play Again</button>
+        </div>
+    </div>
+
+    
     <div class="scores">
         <div class="player" id="player1">
             <h3>Player 1</h3>
